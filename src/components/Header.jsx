@@ -1,5 +1,8 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
+/**
+ * Верхняя навигация приложения; пункт "Все заметки" остается активным и на /edit/:id.
+ */
 export default function Header() {
   const location = useLocation();
   const notesActive = location.pathname === '/' || location.pathname.startsWith('/edit/');

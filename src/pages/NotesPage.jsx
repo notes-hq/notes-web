@@ -10,15 +10,25 @@ const EMPTY_FILTERS = {
   tag: ''
 };
 
+/**
+ * Страница списка заметок с ручным применением search/tag-фильтров.
+ */
 export default function NotesPage() {
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [requestErrorMessage, setRequestErrorMessage] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [tagFilterValue, setTagFilterValue] = useState('');
+  // activeFilters хранит именно примененные фильтры, а не черновик в полях ввода.
   const [activeFilters, setActiveFilters] = useState(EMPTY_FILTERS);
   const [deletingNoteId, setDeletingNoteId] = useState(null);
 
+  /**
+   * Загружает список заметок по переданному набору примененных фильтров.
+   *
+   * @param {{ search: string, tag: string }} filters
+   * @returns {Promise<void>}
+   */
   async function fetchNotes(filters) {
     setIsLoading(true);
     setRequestErrorMessage('');
@@ -37,6 +47,11 @@ export default function NotesPage() {
     fetchNotes(EMPTY_FILTERS);
   }, []);
 
+  /**
+   * Нормализует значения из полей и применяет их к запросу списка.
+   *
+   * @returns {Promise<void>}
+   */
   async function handleApplyFilters() {
     const nextFilters = {
       search: searchValue.trim(),
@@ -49,6 +64,11 @@ export default function NotesPage() {
     await fetchNotes(nextFilters);
   }
 
+  /**
+   * Сбрасывает поля и возвращает список к состоянию без фильтров.
+   *
+   * @returns {Promise<void>}
+   */
   async function handleResetFilters() {
     setSearchValue('');
     setTagFilterValue('');
@@ -56,6 +76,12 @@ export default function NotesPage() {
     await fetchNotes(EMPTY_FILTERS);
   }
 
+  /**
+   * Удаляет заметку со страницы списка и затем перезагружает текущий отфильтрованный список.
+   *
+   * @param {number} id
+   * @returns {Promise<void>}
+   */
   async function handleDelete(id) {
     if (deletingNoteId !== null) {
       return;

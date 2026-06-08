@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 
+/**
+ * Общая форма создания и редактирования заметки с Ctrl+Enter для отправки.
+ */
 export default function NoteForm({
   title,
   noteText,
@@ -16,11 +19,23 @@ export default function NoteForm({
   onSubmit,
   children
 }) {
+  /**
+   * Передает submit формы в страницу, где находится валидация и API-запрос.
+   *
+   * @param {SubmitEvent} event
+   * @returns {void}
+   */
   function handleSubmit(event) {
     event.preventDefault();
     onSubmit();
   }
 
+  /**
+   * Поддерживает горячую клавишу Ctrl+Enter без отдельной кнопки в UI.
+   *
+   * @param {KeyboardEvent} event
+   * @returns {void}
+   */
   function handleKeyDown(event) {
     if (event.ctrlKey && event.key === 'Enter') {
       event.preventDefault();

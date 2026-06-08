@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { formatDate, getPreviewText, getTagColorClass } from '../utils/notes.js';
 
+/**
+ * Карточка заметки в списке: показывает preview, теги и действия редактирования/удаления.
+ */
 export default function NoteCard({ note, deletingNoteId, onDelete }) {
   const preview = getPreviewText(note);
   const isDeleting = deletingNoteId === note.id;

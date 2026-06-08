@@ -7,6 +7,14 @@ export const TAG_COLOR_CLASSES = [
   'tag--rose'
 ];
 
+/**
+ * Нормализует пользовательский ввод тегов перед отправкой на backend.
+ * Разделителями считаются запятые и пробелы; начальный # убирается,
+ * регистр приводится к lowercase, дубликаты удаляются с сохранением порядка.
+ *
+ * @param {string} value
+ * @returns {string[]}
+ */
 export function normalizeTagsInput(value) {
   const seen = new Set();
   const normalized = [];
@@ -27,6 +35,12 @@ export function normalizeTagsInput(value) {
   return normalized;
 }
 
+/**
+ * Нормализует значение одиночного tag-фильтра для GET /notes.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
 export function normalizeTagFilter(value) {
   const trimmed = value.trim();
   const withoutHash = trimmed.startsWith('#') ? trimmed.slice(1) : trimmed;
@@ -34,6 +48,12 @@ export function normalizeTagFilter(value) {
   return withoutHash.trim().toLowerCase();
 }
 
+/**
+ * Проверяет, не пытается ли пользователь ввести тег прямо в текст заметки.
+ *
+ * @param {string} value
+ * @returns {boolean}
+ */
 export function hasHashtagToken(value) {
   return value
     .trim()
@@ -42,6 +62,12 @@ export function hasHashtagToken(value) {
     .some((token) => token.startsWith('#'));
 }
 
+/**
+ * Выполняет frontend-валидацию полей формы до отправки запроса.
+ *
+ * @param {{ title: string, noteText: string }} form
+ * @returns {{ title?: string, noteText?: string }}
+ */
 export function getFrontendFieldErrors({ title, noteText }) {
   const errors = {};
 
@@ -58,6 +84,13 @@ export function getFrontendFieldErrors({ title, noteText }) {
   return errors;
 }
 
+/**
+ * Собирает payload backend: текст заметки и нормализованные теги объединяются в content.
+ * Если теги есть, они добавляются отдельной последней строкой в формате #tag.
+ *
+ * @param {{ title: string, noteText: string, tagsInput: string }} form
+ * @returns {{ title: string, content: string }}
+ */
 export function buildNotePayload({ title, noteText, tagsInput }) {
   const normalizedTags = normalizeTagsInput(tagsInput);
   const trimmedText = noteText.trim();
@@ -72,6 +105,12 @@ export function buildNotePayload({ title, noteText, tagsInput }) {
   };
 }
 
+/**
+ * Раскладывает backend-модель заметки обратно в поля формы редактирования.
+ *
+ * @param {{ title: string, content: string, tags?: string[] }} note
+ * @returns {{ title: string, noteText: string, tagsInput: string }}
+ */
 export function getFormValuesFromNote(note) {
   return {
     title: note.title,
@@ -80,6 +119,14 @@ export function getFormValuesFromNote(note) {
   };
 }
 
+/**
+ * Убирает служебную последнюю строку тегов только при уверенном совпадении с note.tags.
+ * Если заметка создана другим клиентом и строку нельзя распознать безопасно,
+ * content возвращается без попытки агрессивного парсинга.
+ *
+ * @param {{ content?: string, tags?: string[] }} note
+ * @returns {string}
+ */
 export function getContentWithoutServiceTagLine(note) {
   const content = typeof note.content === 'string' ? note.content : '';
   const serviceLineIndex = findServiceTagLineIndex(content, note.tags);
@@ -95,6 +142,12 @@ export function getContentWithoutServiceTagLine(note) {
     .trimEnd();
 }
 
+/**
+ * Формирует короткий preview карточки без служебной строки тегов.
+ *
+ * @param {{ content?: string, tags?: string[] }} note
+ * @returns {string}
+ */
 export function getPreviewText(note) {
   const text = getContentWithoutServiceTagLine(note).trim();
 
@@ -105,6 +158,13 @@ export function getPreviewText(note) {
   return `${text.slice(0, 197).trimEnd()}...`;
 }
 
+/**
+ * Стабильно выбирает CSS-класс цвета по содержимому тега.
+ * Один и тот же тег получает один цвет при каждом рендере.
+ *
+ * @param {string} tag
+ * @returns {string}
+ */
 export function getTagColorClass(tag) {
   let hash = 0;
 
@@ -115,6 +175,12 @@ export function getTagColorClass(tag) {
   return TAG_COLOR_CLASSES[Math.abs(hash) % TAG_COLOR_CLASSES.length];
 }
 
+/**
+ * Форматирует ISO-дату backend в русскую локаль для интерфейса.
+ *
+ * @param {string | null | undefined} value
+ * @returns {string}
+ */
 export function formatDate(value) {
   if (!value) {
     return '';
@@ -126,6 +192,15 @@ export function formatDate(value) {
   });
 }
 
+/**
+ * Находит индекс служебной строки тегов в content.
+ * Строка считается служебной только если она последняя непустая,
+ * состоит исключительно из hashtag-токенов и после нормализации совпадает с note.tags.
+ *
+ * @param {string} content
+ * @param {string[] | undefined} tags
+ * @returns {number}
+ */
 function findServiceTagLineIndex(content, tags) {
   if (!Array.isArray(tags) || tags.length === 0) {
     return -1;
@@ -155,6 +230,12 @@ function findServiceTagLineIndex(content, tags) {
   return lastNonEmptyIndex;
 }
 
+/**
+ * Возвращает индекс последней строки, содержащей непробельные символы.
+ *
+ * @param {string[]} lines
+ * @returns {number}
+ */
 function findLastNonEmptyLineIndex(lines) {
   for (let index = lines.length - 1; index >= 0; index -= 1) {
     if (lines[index].trim() !== '') {
@@ -165,6 +246,13 @@ function findLastNonEmptyLineIndex(lines) {
   return -1;
 }
 
+/**
+ * Сравнивает два массива тегов по длине, порядку и значениям.
+ *
+ * @param {string[]} left
+ * @param {string[]} right
+ * @returns {boolean}
+ */
 function arraysEqual(left, right) {
   if (left.length !== right.length) {
     return false;

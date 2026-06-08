@@ -4,6 +4,9 @@ import NotesPage from './pages/NotesPage.jsx';
 import CreateNotePage from './pages/CreateNotePage.jsx';
 import EditNotePage from './pages/EditNotePage.jsx';
 
+/**
+ * Корневой компонент с маршрутизацией трех экранов приложения.
+ */
 export default function App() {
   return (
     <div className="app-shell">

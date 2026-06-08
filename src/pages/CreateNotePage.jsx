@@ -10,6 +10,9 @@ const EMPTY_FORM = {
   tagsInput: ''
 };
 
+/**
+ * Страница создания заметки с frontend-валидацией перед POST-запросом.
+ */
 export default function CreateNotePage() {
   const navigate = useNavigate();
   const [form, setForm] = useState(EMPTY_FORM);
@@ -17,6 +20,13 @@ export default function CreateNotePage() {
   const [formErrorMessage, setFormErrorMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
+  /**
+   * Обновляет одно поле формы без сброса остальных значений.
+   *
+   * @param {'title' | 'noteText' | 'tagsInput'} field
+   * @param {string} value
+   * @returns {void}
+   */
   function updateForm(field, value) {
     setForm((current) => ({
       ...current,
@@ -24,7 +34,13 @@ export default function CreateNotePage() {
     }));
   }
 
+  /**
+   * Валидирует форму, создает заметку и после успеха возвращает пользователя к списку.
+   *
+   * @returns {Promise<void>}
+   */
   async function handleSubmit() {
+    // Защита от двойной отправки, включая быстрый повтор Ctrl+Enter до re-render.
     if (isSaving) {
       return;
     }

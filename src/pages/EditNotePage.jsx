@@ -10,6 +10,9 @@ const EMPTY_FORM = {
   tagsInput: ''
 };
 
+/**
+ * Страница редактирования заметки с загрузкой текущих данных по route id.
+ */
 export default function EditNotePage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -26,6 +29,11 @@ export default function EditNotePage() {
   useEffect(() => {
     let ignore = false;
 
+    /**
+     * Загружает заметку и раскладывает backend content в поля формы.
+     *
+     * @returns {Promise<void>}
+     */
     async function loadNote() {
       setIsLoading(true);
       setCurrentNote(null);
@@ -64,10 +72,18 @@ export default function EditNotePage() {
     loadNote();
 
     return () => {
+      // ignore защищает от обновления состояния устаревшим запросом при смене /edit/:id.
       ignore = true;
     };
   }, [id]);
 
+  /**
+   * Обновляет одно поле формы редактирования без сброса остальных значений.
+   *
+   * @param {'title' | 'noteText' | 'tagsInput'} field
+   * @param {string} value
+   * @returns {void}
+   */
   function updateForm(field, value) {
     setForm((current) => ({
       ...current,
@@ -75,7 +91,13 @@ export default function EditNotePage() {
     }));
   }
 
+  /**
+   * Валидирует форму, сохраняет PATCH-изменения и возвращает пользователя к списку.
+   *
+   * @returns {Promise<void>}
+   */
   async function handleSubmit() {
+    // Защита от двойной отправки, включая быстрый повтор Ctrl+Enter до re-render.
     if (isSaving) {
       return;
     }
@@ -101,6 +123,11 @@ export default function EditNotePage() {
     }
   }
 
+  /**
+   * Удаляет текущую заметку со страницы редактирования и возвращает пользователя к списку.
+   *
+   * @returns {Promise<void>}
+   */
   async function handleDelete() {
     if (!currentNote || deletingNoteId !== null) {
       return;

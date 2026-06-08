@@ -1,3 +1,6 @@
+/**
+ * Панель фильтров списка; запрос применяется явно по Enter или кнопке "Найти".
+ */
 export default function Filters({
   searchValue,
   tagFilterValue,
@@ -8,6 +11,12 @@ export default function Filters({
   onApply,
   onReset
 }) {
+  /**
+   * Запускает применение фильтров по Enter без автоматического поиска на каждый ввод.
+   *
+   * @param {KeyboardEvent} event
+   * @returns {void}
+   */
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
