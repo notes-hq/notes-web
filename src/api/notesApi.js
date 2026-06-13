@@ -24,7 +24,7 @@ export class ApiError extends Error {
  */
 function buildUrl(path, query = {}) {
   const base = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
-  const url = new URL(`${base}${path}`);
+  const url = new URL(`${base}${path}`, window.location.origin);
 
   Object.entries(query).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {

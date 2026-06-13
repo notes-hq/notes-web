@@ -32,7 +32,7 @@ export default function NoteCard({ note, deletingNoteId, onDelete }) {
 
       <div className="note-actions">
         <Link className="button subtle-button" to={`/edit/${note.id}`}>
-          Редактировать
+          Открыть
         </Link>
         <button
           className="button danger-button"

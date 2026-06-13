@@ -11,7 +11,8 @@ export default function Header() {
   return (
     <header className="app-header">
       <Link className="brand-link" to="/">
-        Заметки
+        <span className="brand-title">Система заметок с тегами</span>
+        <span className="brand-subtitle">Курсовой проект - Мамаев Роман, 01-25.ИСИП.ОД.11</span>
       </Link>
       <nav className="top-nav" aria-label="Основная навигация">
         <NavLink className={notesActive ? 'nav-link active' : 'nav-link'} to="/">
