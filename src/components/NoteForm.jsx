@@ -53,6 +53,7 @@ export default function NoteForm({
           id="note-title"
           type="text"
           value={title}
+          maxLength={255}
           onChange={(event) => onTitleChange(event.target.value)}
           autoFocus={autoFocusTitle}
           aria-invalid={Boolean(fieldErrors.title)}
