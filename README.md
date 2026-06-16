@@ -6,15 +6,11 @@ Frontend-часть информационной системы заметок �
 
 Демо-стенд проекта доступен по адресу:
 
-```text
-http://188.225.58.19/
-```
+[http://188.225.58.19/](http://188.225.58.19/)
 
 Ссылка на репозиторий с backend:
 
-```text
-https://github.com/notes-hq/notes-api
-```
+[https://github.com/notes-hq/notes-api](https://github.com/notes-hq/notes-api)
 
 ## Назначение проекта
 
@@ -414,9 +410,7 @@ npm run dev
 
 После запуска Vite покажет локальный адрес приложения, например:
 
-```text
-http://localhost:5173/
-```
+[http://localhost:5173/](http://localhost:5173/)
 
 ## Сборка
 
