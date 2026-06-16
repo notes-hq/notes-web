@@ -412,6 +412,14 @@ npm run dev
 
 [http://localhost:5173/](http://localhost:5173/)
 
+## Проверка кода
+
+Проверка frontend-кода через ESLint:
+
+```bash
+npm run lint
+```
+
 ## Сборка
 
 Production-сборка:
