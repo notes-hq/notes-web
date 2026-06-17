@@ -152,7 +152,7 @@ Frontend взаимодействует с backend только через REST 
 VITE_API_BASE_URL=http://localhost:3000/api/v1
 ```
 
-Для production-сборки в этом проекте используется файл `.env.production`:
+Для production-сборки можно создать локальный файл `.env.production`. Этот файл игнорируется git и не хранится в репозитории:
 
 ```env
 VITE_API_BASE_URL=/api/v1
@@ -382,7 +382,7 @@ Ctrl+Enter
 VITE_API_BASE_URL=http://localhost:3000/api/v1
 ```
 
-Для production-сборки используется `.env.production`:
+Для production-сборки при необходимости создайте локальный `.env.production`. Файл игнорируется git и используется только как настройка конкретного окружения:
 
 ```env
 VITE_API_BASE_URL=/api/v1
@@ -410,7 +410,9 @@ npm run dev
 
 После запуска Vite покажет локальный адрес приложения, например:
 
-[http://localhost:5173/](http://localhost:5173/)
+```text
+http://localhost:5173/
+```
 
 ## Проверка кода
 
@@ -430,7 +432,7 @@ npm run build
 
 Результат сборки создается в папке `dist`.
 
-Перед сборкой Vite автоматически учитывает `.env.production`, поэтому production-версия не должна собираться с локальным `http://localhost:3000/api/v1`.
+Если перед сборкой создан `.env.production`, Vite автоматически учитывает его. Для production-развертывания за nginx значение `VITE_API_BASE_URL=/api/v1` позволяет не собирать приложение с локальным `http://localhost:3000/api/v1`.
 
 ## Preview production-сборки
 
